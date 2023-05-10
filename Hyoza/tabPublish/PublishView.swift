@@ -13,7 +13,7 @@ struct PublishView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.displayScale) var displayScale
     
-    @State var titleText = "제목"
+    @State var titleText = ""
     @State var periodSelection: PeriodSelection = .custom
     
     @State var startDate: Date = Date()
