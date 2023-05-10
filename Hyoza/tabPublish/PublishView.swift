@@ -10,6 +10,10 @@ import UIKit
 import CoreData
 
 struct PublishView: View {
+    var questionProvider: QuestionProvider = .shared
+    @AppStorage("lastUpdated")
+    private var lastUpdated = Date.distantFuture.timeIntervalSince1970
+    
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.displayScale) var displayScale
     
@@ -107,9 +111,10 @@ struct PublishView: View {
             Button {
                 print("출판하기 button did tap")
                 Task {
-                    if let image = await periodView.render(scale: displayScale) {
-                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                    }
+                    await fetchQuestion()
+//                    if let image = await periodView.render(scale: displayScale) {
+//                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//                    }
                 }
             } label: {
                 ZStack {
@@ -126,6 +131,17 @@ struct PublishView: View {
         .padding()
     }
 }
+
+extension PublishView {
+    private func fetchQuestion() async {
+        do {
+            try await questionProvider.fetchQuestion()
+            lastUpdated = Date().timeIntervalSince1970
+        } catch {
+        }
+    }
+}
+
 
 
 struct PublishView_Previews: PreviewProvider {

@@ -15,7 +15,8 @@ struct HyozaApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.managedObjectContext, QuestionProvider.shared.container.viewContext)
         }
     }
 }

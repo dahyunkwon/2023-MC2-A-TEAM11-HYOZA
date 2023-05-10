@@ -21,7 +21,7 @@ extension Question {
     @NSManaged public var comment: String?
     @NSManaged public var id: Int64
     @NSManaged public var question: String?
-    @NSManaged public var timestamp: Date?
+    @NSManaged public var timestamp: Date
     @NSManaged public var difficulty: Int32
 
 }

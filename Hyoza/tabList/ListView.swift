@@ -10,9 +10,10 @@ import CoreData
 
 struct ListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Question.timestamp, ascending:false)],
-        animation: .default)
+    //    @FetchRequest(
+    //        sortDescriptors: [SortDescriptor( \.timestamp, order:.reverse)],
+    @FetchRequest(sortDescriptors:[SortDescriptor(\.timestamp, order: .reverse)])
+    //        animation: .default)
     
     private var items : FetchedResults<Question>
     @State private var searchText : String = ""
@@ -144,7 +145,7 @@ private struct CellContents : View {
     // TODO: 더 나은 방식으로 개선할 수 없나?
     var body : some View{
         VStack(alignment : .leading) {
-            Text(item.timestamp!, formatter : itemFormatter)
+            Text(item.timestamp, formatter : itemFormatter)
                 .font(.caption)
                 .foregroundColor(.textColor)
                 .frame(width: viewWidth , alignment: .leading)
