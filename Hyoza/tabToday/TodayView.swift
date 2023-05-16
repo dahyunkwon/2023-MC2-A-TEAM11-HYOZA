@@ -19,7 +19,6 @@ struct TodayView: View {
     @State var easyQuestions: [Question] = []
     @State var hardQuestions: [Question] = []
     @State var isContinueIconSmall: Bool = false
-    @State var selectedQuestion: Question? = nil
     @State var openDegree: Double = 90
     @State var closedDegree: Double = 0
     
@@ -28,13 +27,17 @@ struct TodayView: View {
     @Binding var continueTextOpacity: Double
     @Binding var tempTextStorage: String?
     @Binding var isContinueIconAnimating: Bool
+    @Binding var selectedQuestion: Question?
     
     var body: some View {
         NavigationStack {
                 VStack {
                     VStack(alignment: .leading) {
                         Text(Date().dateOnlyString)
-                            .font(.system(.footnote))
+                            .font(.footnote)
+                            .foregroundColor(.textSecondaryColor)
+                            .bold()
+                            .offset(CGSize(width:0, height:8))
                         HStack {
                             Text("오늘의 질문")
                                 .font(.largeTitle)
@@ -69,12 +72,10 @@ struct TodayView: View {
                 .padding(20)
             .background(Color.backGroundWhite.ignoresSafeArea())
             .onAppear() {
-                if let _selectedQuestion = PersistenceController.shared.selectedQuestion,
-                   selectedQuestion == nil {
-                    selectedQuestion = _selectedQuestion
+                if selectedQuestion != nil || PersistenceController.shared.todayAnsweredQuestion != nil {
                     closedDegree = -90
                     openDegree = 0
-                    isQuestionBoxViewTapped.toggle()
+                    isQuestionBoxViewTapped = true
                 }
             }
         }
@@ -115,7 +116,16 @@ struct ContinueIconView: View {
     
     var body: some View {
         CardView(cornerRadius: 16, shadowColor: .black.opacity(0.05), shadowRadius: 12) {
-            HStack {
+            HStack(spacing: 0) {
+                if let text {
+                    Text(text)
+                        .font(.caption)
+                        .foregroundColor(.textColor)
+                        .bold()
+                        .padding(.horizontal, 6)
+                        .opacity(textOpacity)
+                        
+                }
                 switch continuousDayCount {
                 case 1..<4:
                     Text("💛")
@@ -128,12 +138,6 @@ struct ContinueIconView: View {
                 default:
                     Text("🤍")
                 }
-                if let text {
-                    Text(text)
-                        .font(.caption)
-                        .bold()
-                        .opacity(textOpacity)
-                }
             }
         }
     }
@@ -141,6 +145,6 @@ struct ContinueIconView: View {
 
 struct TodayView_Previews: PreviewProvider {
     static var previews: some View {
-        TodayView(continuousDayCount: .constant(0), continueText: .constant(nil), continueTextOpacity: .constant(1.0), tempTextStorage: .constant("작성을 시작해보세요!"), isContinueIconAnimating: .constant(false))
+        TodayView(continuousDayCount: .constant(0), continueText: .constant(nil), continueTextOpacity: .constant(1.0), tempTextStorage: .constant("작성을 시작해보세요!"), isContinueIconAnimating: .constant(false), selectedQuestion: .constant(nil))
     }
 }

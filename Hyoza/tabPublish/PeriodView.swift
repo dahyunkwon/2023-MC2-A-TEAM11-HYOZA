@@ -10,7 +10,7 @@ import SwiftUI
 struct PeriodView: View {
     var cornerRadius: CGFloat
     var periodSelection: PeriodSelection
-    
+    var firstDate = PersistenceController.shared.oldestAnsweredQuestion?.answer?.answerTime ?? Date()
     private enum K {
         static let startText: LocalizedStringKey = "시작"
         static let endText: LocalizedStringKey = "종료"
@@ -27,17 +27,18 @@ struct PeriodView: View {
                 DatePicker(
                     K.startText,
                     selection: $startDate,
-                    in: ...endDate,
+                    in: firstDate...endDate,
                     displayedComponents: [.date]
                 )
                 
                 DatePicker(
                     K.endText,
                     selection: $endDate,
-                    in: startDate...,
+                    in: startDate...Date(),
                     displayedComponents: [.date]
                 )
             }
+            .foregroundColor(.textColor)
             .colorMultiply(Color.orange)
             .datePickerStyle(CompactDatePickerStyle())
             .environment(\.locale, Locale(identifier: K.pickerLocale))
